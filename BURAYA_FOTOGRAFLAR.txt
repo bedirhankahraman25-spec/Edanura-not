@@ -1,0 +1,1 @@
+Fotoğraflarını bu klasöre foto1.jpg, foto2.jpg ve foto3.jpg adlarıyla yükle.
