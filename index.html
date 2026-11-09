@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17101f">
+<title>Edanur için</title>
+<style>
+:root{
+  --lilac:#c8a6e8; --pink:#f0a9c9; --pale:#fff3fa;
+  --ink:#25152b; --deep:#17101f; --soft:#ead8f4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif}
+body{
+  color:var(--pale);
+  background:radial-gradient(circle at 50% 35%,#62436c 0%,#30213b 42%,#17101f 100%);
+  overflow-x:hidden;
+}
+button{font:inherit;cursor:pointer}
+#app{min-height:100svh;position:relative;isolation:isolate}
+.screen{
+  min-height:100svh;display:none;position:relative;z-index:2;
+  padding:80px 26px 70px;align-items:center;justify-content:center;
+  text-align:center;flex-direction:column;gap:22px;
+}
+.screen.active{display:flex;animation:screenIn 1s ease both}
+@keyframes screenIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+#intro{background:#08070b;position:fixed;inset:0;z-index:20;display:flex;
+  align-items:center;justify-content:center;padding:30px;opacity:1;transition:opacity 2.2s ease}
+#intro.reveal{opacity:0;pointer-events:none}
+.intro-inner{max-width:520px;animation:softIn 3s ease both}
+@keyframes softIn{from{opacity:0}to{opacity:1}}
+.eyebrow{letter-spacing:.28em;text-transform:uppercase;font:11px Arial,sans-serif;color:#e8c8ee}
+h1,h2,p{margin:0}
+.welcome-title{font-size:clamp(32px,8vw,54px);font-weight:normal;color:#f6d9ec;margin-bottom:18px}
+.welcome-copy{font-size:clamp(17px,4.5vw,21px);line-height:1.65;color:#f3e5f4}
+.small-note{font-size:13px;letter-spacing:.12em;color:#e9c8e4;margin-top:25px}
+.primary{
+  border:1px solid rgba(255,225,247,.55);border-radius:999px;
+  color:#fff4fb;background:linear-gradient(120deg,rgba(202,160,229,.35),rgba(239,157,196,.28));
+  padding:14px 25px;box-shadow:0 0 25px rgba(226,163,216,.17);
+  transition:transform .25s,box-shadow .25s
+}
+.primary:active,.heart-button:active,.photo-heart:active{transform:scale(.96)}
+.primary:hover{box-shadow:0 0 32px rgba(226,163,216,.35)}
+#musicHint{font:12px Arial,sans-serif;color:#d9c1dc;line-height:1.5}
+.flower-edge{position:fixed;z-index:5;top:0;bottom:0;width:clamp(62px,15vw,130px);
+  pointer-events:none;display:flex;flex-direction:column;justify-content:space-around;opacity:.92}
+.flower-edge.left{left:-8px}.flower-edge.right{right:-8px;transform:scaleX(-1)}
+.flower{width:100%;height:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,.25))}
+.content{width:min(100%,650px);position:relative;z-index:3}
+h2{font-size:clamp(30px,8vw,48px);font-weight:normal;letter-spacing:.09em;color:#ffe6f4;text-shadow:0 0 22px rgba(236,174,220,.35)}
+.subtitle{font-size:16px;line-height:1.6;color:#f0dced}
+.heart-button{
+  width:116px;height:108px;border:0;background:transparent;position:relative;
+  color:#f5b9d7;font-size:78px;line-height:1;text-shadow:0 0 24px #e9a8d2;
+  animation:heartbeat 1.8s ease-in-out infinite
+}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:14px 0 8px}
+.photo-heart{
+  border:1px solid rgba(255,222,245,.45);border-radius:18px;padding:8px 6px 12px;
+  background:rgba(255,239,250,.09);color:#fff0f8;min-width:0;
+  box-shadow:0 8px 24px rgba(0,0,0,.12)
+}
+.photo-heart .heart-icon{font-size:36px;color:#f1a9cb;display:block;margin-bottom:4px}
+.photo-heart img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:none}
+.photo-heart.has-photo img{display:block}
+.photo-heart.has-photo .heart-icon{display:none}
+.photo-heart span:last-child{display:block;font:11px Arial,sans-serif;margin-top:7px;overflow-wrap:anywhere}
+.photo-modal{position:fixed;inset:0;background:rgba(10,6,14,.92);z-index:30;display:none;align-items:center;justify-content:center;padding:24px}
+.photo-modal.open{display:flex}
+.photo-modal img{max-width:min(90vw,520px);max-height:75svh;object-fit:contain;border-radius:18px;box-shadow:0 0 35px #c58ac5}
+.photo-modal button{position:absolute;top:20px;right:20px;background:transparent;border:1px solid #fff;color:#fff;border-radius:50%;width:42px;height:42px}
+.letter-wrap{width:min(100%,560px);padding:22px 18px;border-radius:26px;
+  background:linear-gradient(145deg,rgba(255,242,250,.96),rgba(225,202,242,.96));
+  color:#543653;box-shadow:0 18px 65px rgba(0,0,0,.3);position:relative;overflow:hidden}
+.letter-wrap:before{content:"";position:absolute;inset:10px;border:1px solid rgba(172,112,165,.35);border-radius:20px;pointer-events:none}
+.letter-heart{font-size:36px;color:#d987b4;margin-bottom:10px}
+.letter-text{font-size:clamp(16px,4.2vw,19px);line-height:1.8;text-align:left;white-space:pre-wrap;position:relative;z-index:1}
+.letter-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.close-btn{background:linear-gradient(120deg,#d99bc4,#b99ad9);border:0;border-radius:999px;color:white;padding:14px 34px;letter-spacing:.13em}
+#final{background:#110b16}
+.final-words{font-size:clamp(30px,8vw,48px);color:#f9d7ec;letter-spacing:.04em;text-shadow:0 0 25px #d98dbd;animation:softIn 2s ease both}
+#fadeout{position:fixed;inset:0;background:#050408;z-index:50;opacity:0;pointer-events:none;transition:opacity 3.5s ease}
+#fadeout.on{opacity:1}
+#musicToggle{position:fixed;right:14px;bottom:14px;z-index:10;border:1px solid #e8c8e7;
+  background:rgba(35,22,42,.72);color:#fff;border-radius:99px;padding:9px 13px;font:12px Arial,sans-serif}
+@media(max-width:420px){
+ .screen{padding-left:24px;padding-right:24px}
+ .photo-grid{gap:8px}
+ .photo-heart{padding:6px 5px 9px}
+ .flower-edge{width:58px;opacity:.72}
+ .letter-wrap{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Kenarlardaki süslemeler: yalnızca beyaz zambak ve siyah gül -->
+  <div class="flower-edge left" aria-hidden="true">
+    <svg class="flower" viewBox="0 0 110 180"><path d="M55 180 Q42 120 58 65" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M53 128 Q15 95 17 125 Q36 145 53 128" fill="#54795e"/><g transform="translate(58 58)"><path d="M0 0 C-48 -25 -40 -66 -14 -48 C-20 -84 16 -84 12 -48 C43 -68 55 -27 12 0 C40 26 9 49 0 14 C-14 49 -42 25 0 0" fill="#fff8fc" stroke="#d9c4dc" stroke-width="2"/><path d="M0 0 Q-5 -28 0 -45 M0 0 Q-18 -20 -26 -32 M0 0 Q20 -20 30 -32" stroke="#d8a9bd" stroke-width="2" fill="none"/><circle cx="0" cy="0" r="4" fill="#d6b16b"/></g></svg>
+    <svg class="flower" viewBox="0 0 110 150"><path d="M55 150 Q60 95 52 55" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M54 112 Q15 85 17 111 Q34 130 54 112" fill="#54795e"/><g transform="translate(53 45)"><path d="M0 0 C-30 -33 -48 -3 -21 13 C-42 35 -9 48 5 20 C22 49 49 24 21 9 C47 -12 20 -37 0 0" fill="#100d13" stroke="#4c414f" stroke-width="2"/><path d="M-12 2 Q0 -13 12 1 Q2 17 -8 9 Q-2 1 4 2" fill="none" stroke="#88718a" stroke-width="2"/></g></svg>
+  </div>
+  <div class="flower-edge right" aria-hidden="true">
+    <svg class="flower" viewBox="0 0 110 180"><path d="M55 180 Q42 120 58 65" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M53 128 Q15 95 17 125 Q36 145 53 128" fill="#54795e"/><g transform="translate(58 58)"><path d="M0 0 C-48 -25 -40 -66 -14 -48 C-20 -84 16 -84 12 -48 C43 -68 55 -27 12 0 C40 26 9 49 0 14 C-14 49 -42 25 0 0" fill="#fff8fc" stroke="#d9c4dc" stroke-width="2"/><path d="M0 0 Q-5 -28 0 -45 M0 0 Q-18 -20 -26 -32 M0 0 Q20 -20 30 -32" stroke="#d8a9bd" stroke-width="2" fill="none"/><circle cx="0" cy="0" r="4" fill="#d6b16b"/></g></svg>
+    <svg class="flower" viewBox="0 0 110 150"><path d="M55 150 Q60 95 52 55" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M54 112 Q15 85 17 111 Q34 130 54 112" fill="#54795e"/><g transform="translate(53 45)"><path d="M0 0 C-30 -33 -48 -3 -21 13 C-42 35 -9 48 5 20 C22 49 49 24 21 9 C47 -12 20 -37 0 0" fill="#100d13" stroke="#4c414f" stroke-width="2"/><path d="M-12 2 Q0 -13 12 1 Q2 17 -8 9 Q-2 1 4 2" fill="none" stroke="#88718a" stroke-width="2"/></g></svg>
+  </div>
+
+  <section id="intro">
+    <div class="intro-inner">
+      <div class="eyebrow">Sana özel</div>
+      <h1 class="welcome-title">Edanur...</h1>
+      <p class="welcome-copy">Bu küçük dünya senin için hazırlandı.<br>Sana anlatmak istediğim birkaç şey var. Belki bu kez kelimelerim, içimden geçenleri daha iyi anlatabilir.</p>
+      <p class="small-note">Benim için devam et...</p>
+      <button class="primary" id="beginBtn" style="margin-top:22px">Devam et</button>
+      <p id="musicHint" style="margin-top:14px">Müzik, telefonlarda ilk dokunuşla başlayabilir.</p>
+    </div>
+  </section>
+
+  <main>
+    <section class="screen active" id="noteScreen">
+      <div class="content">
+        <p class="eyebrow">Edanur için</p>
+        <h2>NOTUN VAR</h2>
+        <p class="subtitle">Kalbe dokun...</p>
+        <button class="heart-button" id="openHearts" aria-label="Notu aç">♥</button>
+      </div>
+    </section>
+
+    <section class="screen" id="photosScreen">
+      <div class="content">
+        <p class="eyebrow">Küçük sürprizler</p>
+        <h2>Küçük kalpler</h2>
+        <p class="subtitle">Kalplere dokundukça fotoğraflar açılacak.</p>
+        <div class="photo-grid" id="photoGrid">
+          <button class="photo-heart" data-photo="images/foto1.jpg" aria-label="Birinci fotoğraf">
+            <span class="heart-icon">♥</span><img alt="Birinci fotoğraf"><span>Bir kalbe dokun</span>
+          </button>
+          <button class="photo-heart" data-photo="images/foto2.jpg" aria-label="İkinci fotoğraf">
+            <span class="heart-icon">♥</span><img alt="İkinci fotoğraf"><span>Bir kalbe dokun</span>
+          </button>
+          <button class="photo-heart" data-photo="images/foto3.jpg" aria-label="Üçüncü fotoğraf">
+            <span class="heart-icon">♥</span><img alt="Üçüncü fotoğraf"><span>Bir kalbe dokun</span>
+          </button>
+        </div>
+        <button class="primary" id="toLetter">Mektuba geç</button>
+      </div>
+    </section>
+
+    <section class="screen" id="letterScreen">
+      <div class="content">
+        <div class="letter-wrap">
+          <div class="letter-heart">♥</div>
+          <div class="letter-text" id="letterText">Aşkım seni çok seviyom istemeden seni kırdığım senle küs kaldığım her an benim için boşa geçmiş demek sensiz yapamam dün kırdım istemeden belkide çok fazla kırdım ama hicbisey senden değerli değil nolursa olsun senle düzelmekten başka bişey istemiyom öyle bi olay yüzünden senle küs kalmak konuşamamak istemiyom seni çok seviyom aşkım seni ne kadar kirdiysam buluşunca okadar dövebilirrsin çok seviyom seni kendimden daha çok seviyom özür dilerim.</div>
+        </div>
+        <button class="close-btn" id="closeLetter">KAPAT</button>
+      </div>
+    </section>
+
+    <section class="screen" id="final">
+      <div class="content">
+        <h2 class="final-words">SENİ ÇOK SEVİYORUM</h2>
+      </div>
+    </section>
+  </main>
+  <audio id="bgMusic" src="music/muzik.mp3" preload="auto" loop></audio>
+  <button id="musicToggle" type="button" aria-label="Müziği aç veya kapat">Müziği aç / kapat</button>
+  <div class="photo-modal" id="photoModal"><button id="modalClose" aria-label="Kapat">×</button><img id="modalImage" alt="Seçilen fotoğraf"></div>
+  <div id="fadeout"></div>
+</div>
+<script>
+const screens = ["noteScreen","photosScreen","letterScreen","final"];
+function showScreen(id){
+  screens.forEach(s=>document.getElementById(s).classList.toggle("active",s===id));
+}
+const intro=document.getElementById("intro");
+const music=document.getElementById("bgMusic");
+document.getElementById("beginBtn").addEventListener("click",async()=>{
+  try{await music.play();}catch(e){document.getElementById("musicHint").textContent="Müzik dosyasını music/muzik.mp3 konumuna ekle.";}
+  intro.classList.add("reveal");
+  setTimeout(()=>intro.style.display="none",2300);
+});
+document.getElementById("musicToggle").addEventListener("click",async()=>{
+  if(music.paused){try{await music.play();}catch(e){alert("Önce music/muzik.mp3 dosyasını yükle.");}}
+  else music.pause();
+});
+document.getElementById("openHearts").addEventListener("click",()=>showScreen("photosScreen"));
+document.querySelectorAll(".photo-heart").forEach((button)=>{
+  const path=button.dataset.photo, img=button.querySelector("img");
+  img.src=path;
+  img.addEventListener("load",()=>button.classList.add("has-photo"));
+  button.addEventListener("click",()=>{
+    if(!img.complete || !img.naturalWidth){
+      alert("Bu kalbe ait fotoğraf henüz yüklenmedi. "+path+" konumuna fotoğraf ekle.");
+      return;
+    }
+    document.getElementById("modalImage").src=path;
+    document.getElementById("photoModal").classList.add("open");
+  });
+});
+document.getElementById("modalClose").addEventListener("click",()=>document.getElementById("photoModal").classList.remove("open"));
+document.getElementById("photoModal").addEventListener("click",(e)=>{if(e.target.id==="photoModal")e.currentTarget.classList.remove("open");});
+document.getElementById("toLetter").addEventListener("click",()=>showScreen("letterScreen"));
+document.getElementById("closeLetter").addEventListener("click",()=>{
+  showScreen("final");
+  setTimeout(()=>document.getElementById("fadeout").classList.add("on"),3500);
+});
+</script>
+</body>
+</html>
