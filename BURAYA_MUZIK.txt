@@ -1,0 +1,1 @@
+Seçtiğin müzik dosyasını bu klasöre muzik.mp3 adıyla yükle.
