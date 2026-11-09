@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#17101f">
+<title>Edanur için</title>
+<style>
+:root{--lilac:#c8a6e8;--pink:#f0a9c9;--pale:#fff3fa;--deep:#17101f}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif}
+body{color:var(--pale);background:radial-gradient(circle at 50% 35%,#62436c 0%,#30213b 45%,#100b16 100%);overflow-x:hidden}
+button{font:inherit;cursor:pointer}
+#app{min-height:100svh;position:relative;isolation:isolate}
+.screen{min-height:100svh;display:none;position:relative;z-index:2;padding:36px 22px 44px;align-items:center;justify-content:center;text-align:center;flex-direction:column;gap:22px}
+.screen.active{display:flex;animation:appear .8s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.flower-edge{position:fixed;z-index:1;top:0;bottom:0;width:clamp(48px,12vw,100px);pointer-events:none;display:flex;flex-direction:column;justify-content:space-around;opacity:.75}
+.flower-edge.left{left:-8px}.flower-edge.right{right:-8px;transform:scaleX(-1)}
+.flower{width:100%;height:auto;filter:drop-shadow(0 4px 12px #0005)}
+.content{width:min(100%,620px);position:relative;z-index:3}
+h1,h2,p{margin:0}
+h2{font-size:clamp(28px,7vw,42px);font-weight:normal;letter-spacing:.07em;color:#ffe6f4;text-shadow:0 0 22px #ecadda55}
+#introScreen{background:radial-gradient(circle at 50% 35%,#62436c 0%,#30213b 48%,#100b16 100%);gap:18px}
+.intro-title{font-size:clamp(34px,9vw,48px);letter-spacing:.08em;color:#ffe6f4;text-shadow:0 0 24px #ecadda66}
+.intro-message{font-size:clamp(20px,5.5vw,27px);line-height:1.5;color:#fff0f8}
+.intro-instruction{font-size:15px;color:#f5ddec;margin-top:14px}
+.intro-hint{font-size:13px;color:#d7bfd9;margin-top:-10px}
+#passwordInput{width:min(100%,280px);padding:15px 18px;border:1px solid #f6d9ed88;border-radius:15px;background:#ffffff12;color:#fff;text-align:center;font:20px Arial,sans-serif;letter-spacing:.3em;outline:none}
+#passwordInput::placeholder{color:#d7bfd9;letter-spacing:.08em}
+#passwordError{min-height:18px;font:13px Arial,sans-serif;color:#ffb2c0}
+#quizStart{background:radial-gradient(circle,#49304f 0%,#17101f 70%)}
+#app:not(.started) .flower-edge,#app:not(.started) #musicToggle{display:none}
+.quiz-start{font-size:clamp(44px,13vw,72px);font-weight:normal;letter-spacing:.2em;color:#ffe7f5;text-shadow:0 0 30px #f0a9c9; border:0;background:none;padding:30px 20px;animation:pulse 2.3s ease-in-out infinite}
+@keyframes pulse{50%{text-shadow:0 0 48px #f4a9d3;transform:scale(1.04)}}
+.question-count{font:12px Arial,sans-serif;letter-spacing:.18em;color:#e5cbe5}
+.question-title{font-size:clamp(22px,6vw,31px);line-height:1.45;color:#fff0f8;margin:8px auto 20px;max-width:520px}
+.question-card{width:min(100%,540px);padding:26px 18px;border:1px solid #f6d9ed55;border-radius:26px;background:linear-gradient(145deg,#ffffff12,#ffffff06);box-shadow:0 18px 55px #0003;backdrop-filter:blur(8px)}
+.options{display:grid;gap:12px}
+.option{width:100%;border:1px solid #f4d6ec66;border-radius:17px;padding:15px 16px;background:#fff0f80d;color:#fff3fa;text-align:left;font-size:17px;transition:.2s;min-height:54px}
+.option:active{transform:scale(.98)}
+.option.correct{background:#b9e6c51e;border-color:#b9e6c5;box-shadow:0 0 18px #b9e6c533}
+.option.wrong{animation:shake .35s;border-color:#ff8b9e}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.question-photos{display:flex;justify-content:center;align-items:center;gap:16px;margin:0 auto 16px;min-height:88px}
+.question-photos img{width:76px;height:76px;object-fit:cover;border-radius:13px;border:2px solid #f5d9ed;box-shadow:0 8px 22px #0005}
+.question-photos img:nth-child(1){transform:rotate(-8deg)}.question-photos img:nth-child(2){transform:rotate(5deg) translateY(-5px)}.question-photos img:nth-child(3){transform:rotate(9deg)}
+#loveScreen .content{max-width:520px}
+.love-question{font-size:clamp(25px,7vw,36px);line-height:1.4;margin-bottom:40px;color:#ffe7f4}
+.slider-shell{padding:18px 12px 12px;border-radius:24px;border:1px solid #f6d9ed66;background:#ffffff0d;touch-action:none;user-select:none}
+.slider-track{height:19px;border-radius:30px;background:#ffffff24;position:relative;overflow:visible;box-shadow:inset 0 2px 7px #0005}
+.slider-fill{height:100%;width:0%;border-radius:30px;background:linear-gradient(90deg,#b69be8,#f3a9cc,#ffe1f1);box-shadow:0 0 20px #efacd4;pointer-events:none}
+.slider-thumb{position:absolute;left:0%;top:50%;width:34px;height:34px;border-radius:50%;transform:translate(-50%,-50%);background:#fff0f8;border:3px solid #e7a9d0;box-shadow:0 0 20px #efacd4;pointer-events:none}
+.slider-percent{font:14px Arial,sans-serif;letter-spacing:.12em;color:#f5ddec;margin-top:18px}
+.slider-hint{font:12px Arial,sans-serif;color:#d7bfd9;margin-top:12px}
+.letter-wrap{width:min(100%,560px);padding:24px 19px;border-radius:26px;background:linear-gradient(145deg,#fff2fa,#e1caf2);color:#543653;box-shadow:0 18px 65px #0005;position:relative;overflow:hidden}
+.letter-wrap:before{content:"";position:absolute;inset:10px;border:1px solid #ac70a555;border-radius:20px;pointer-events:none}
+.letter-heart{font-size:35px;color:#d987b4;margin-bottom:12px}
+.letter-text{font-size:clamp(16px,4.3vw,19px);line-height:1.8;text-align:left;position:relative;z-index:1}
+.primary{border:1px solid #ffe1f799;border-radius:999px;color:white;background:linear-gradient(120deg,#caa0e966,#ef9dc466);padding:14px 32px;box-shadow:0 0 25px #e2a3d82b;letter-spacing:.12em}
+#forgiveScreen{gap:34px}
+.forgive-title{font-size:clamp(28px,8vw,42px);font-weight:normal;color:#ffe6f4}
+.forgive-actions{display:flex;align-items:center;justify-content:center;gap:22px;min-height:100px;width:100%;flex-wrap:wrap}
+.yes-btn,.no-btn{border:1px solid #f6d9ed88;border-radius:999px;padding:15px 32px;color:#fff;background:linear-gradient(120deg,#caa0e966,#ef9dc466);min-width:115px;transition:transform .25s,font-size .25s,padding .25s,opacity .25s}
+.no-btn{background:#ffffff12}
+#finalScreen{background:radial-gradient(circle,#583b60 0%,#120c18 72%)}
+.final-words{font-size:clamp(34px,9vw,52px);color:#f9d7ec;letter-spacing:.04em;text-shadow:0 0 25px #d98dbd;animation:glow 2s ease-in-out infinite alternate}
+@keyframes glow{to{text-shadow:0 0 42px #f4acd3;transform:scale(1.025)}}
+#fadeout{position:fixed;inset:0;background:#050408;z-index:50;opacity:0;pointer-events:none;transition:opacity 4s ease}
+#fadeout.on{opacity:1}
+#musicToggle{position:fixed;right:12px;bottom:12px;z-index:10;border:1px solid #e8c8e7;background:#23162acc;color:#fff;border-radius:99px;padding:9px 12px;font:11px Arial,sans-serif}
+@media(max-width:420px){.screen{padding-left:18px;padding-right:18px}.question-card{padding:22px 14px}.question-photos img{width:67px;height:67px}.flower-edge{width:46px;opacity:.55}.option{font-size:16px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="flower-edge left" aria-hidden="true">
+    <svg class="flower" viewBox="0 0 110 180"><path d="M55 180 Q42 120 58 65" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M53 128 Q15 95 17 125 Q36 145 53 128" fill="#54795e"/><g transform="translate(58 58)"><path d="M0 0 C-48 -25 -40 -66 -14 -48 C-20 -84 16 -84 12 -48 C43 -68 55 -27 12 0 C40 26 9 49 0 14 C-14 49 -42 25 0 0" fill="#fff8fc" stroke="#d9c4dc" stroke-width="2"/><circle r="4" fill="#d6b16b"/></g></svg>
+    <svg class="flower" viewBox="0 0 110 150"><path d="M55 150 Q60 95 52 55" stroke="#8fba91" stroke-width="3" fill="none"/><g transform="translate(53 45)"><path d="M0 0 C-30 -33 -48 -3 -21 13 C-42 35 -9 48 5 20 C22 49 49 24 21 9 C47 -12 20 -37 0 0" fill="#100d13" stroke="#4c414f" stroke-width="2"/></g></svg>
+  </div>
+  <div class="flower-edge right" aria-hidden="true">
+    <svg class="flower" viewBox="0 0 110 180"><path d="M55 180 Q42 120 58 65" stroke="#8fba91" stroke-width="3" fill="none"/><path d="M53 128 Q15 95 17 125 Q36 145 53 128" fill="#54795e"/><g transform="translate(58 58)"><path d="M0 0 C-48 -25 -40 -66 -14 -48 C-20 -84 16 -84 12 -48 C43 -68 55 -27 12 0 C40 26 9 49 0 14 C-14 49 -42 25 0 0" fill="#fff8fc" stroke="#d9c4dc" stroke-width="2"/><circle r="4" fill="#d6b16b"/></g></svg>
+    <svg class="flower" viewBox="0 0 110 150"><path d="M55 150 Q60 95 52 55" stroke="#8fba91" stroke-width="3" fill="none"/><g transform="translate(53 45)"><path d="M0 0 C-30 -33 -48 -3 -21 13 C-42 35 -9 48 5 20 C22 49 49 24 21 9 C47 -12 20 -37 0 0" fill="#100d13" stroke="#4c414f" stroke-width="2"/></g></svg>
+  </div>
+
+  <main>
+    <section class="screen active" id="introScreen">
+      <div class="content">
+        <h2 class="intro-title">Edanura Not</h2>
+        <p class="intro-message">Umarım<br>Beni affedersin Aşkım</p>
+        <p class="intro-instruction">Devam etmek için şifreyi girin</p>
+        <p class="intro-hint">İpucu: seni sevmeye başladığım gün</p>
+        <input id="passwordInput" type="password" inputmode="numeric" maxlength="4" placeholder="Şifre" autocomplete="off">
+        <button class="primary" id="continueButton">DEVAM ET</button>
+        <div id="passwordError" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="quizStart">
+      <div class="content"><button class="quiz-start" id="startQuiz">QUIZ</button></div>
+    </section>
+
+    <section class="screen" id="questionScreen">
+      <div class="content">
+        <div class="question-count" id="questionCount">1 / 10</div>
+        <div class="question-photos" id="questionPhotos" hidden>
+          <img src="images/foto1.jpg" alt="Fotoğraf 1">
+          <img src="images/foto2.jpg" alt="Fotoğraf 2">
+          <img src="images/foto3.jpg" alt="Fotoğraf 3">
+        </div>
+        <div class="question-card">
+          <h2 class="question-title" id="questionTitle"></h2>
+          <div class="options" id="options"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="loveScreen">
+      <div class="content">
+        <h2 class="love-question">Beni ne kadar seviyorsun?</h2>
+        <div class="slider-shell" id="sliderShell" aria-label="Sevgi barı">
+          <div class="slider-track" id="sliderTrack">
+            <div class="slider-fill" id="sliderFill"></div>
+            <div class="slider-thumb" id="sliderThumb"></div>
+          </div>
+          <div class="slider-percent" id="sliderPercent">%0</div>
+          <div class="slider-hint">Çubuğu basılı tutup sağa sürükle</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="letterScreen">
+      <div class="content">
+        <div class="letter-wrap">
+          <div class="letter-heart">♥</div>
+          <div class="letter-text">Aşkım seni çok seviyom istemeden seni kırdığım senle küs kaldığım her an benim için boşa geçmiş demek sensiz yapamam dün kırdım istemeden belkide çok fazla kırdım ama hicbisey senden değerli değil nolursa olsun senle düzelmekten başka bişey istemiyom öyle bi olay yüzünden senle küs kalmak konuşamamak istemiyom seni çok seviyom aşkım seni ne kadar kirdiysam buluşunca okadar dövebilirrsin çok seviyom seni kendimden daha çok seviyom özür dilerim.</div>
+        </div>
+        <button class="primary" id="closeLetter">KAPAT</button>
+      </div>
+    </section>
+
+    <section class="screen" id="forgiveScreen">
+      <div class="content">
+        <h2 class="forgive-title">Beni affettin mi?</h2>
+        <div class="forgive-actions">
+          <button class="yes-btn" id="yesBtn">EVET</button>
+          <button class="no-btn" id="noBtn">HAYIR</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="finalScreen">
+      <div class="content"><h2 class="final-words">SENİ SEVİYORUM</h2></div>
+    </section>
+  </main>
+
+  <audio id="bgMusic" src="music/muzik.mp3" preload="auto" loop></audio>
+  <button id="musicToggle" type="button">Müziği aç / kapat</button>
+  <div id="fadeout"></div>
+</div>
+<script>
+const questions = [
+ {q:"en son gittiğimiz buluşmada izlediğimiz film",a:["Ecrin su çoban (velet)","Minyonlar","Rafadan Tayfa"],correct:1},
+ {q:"First Kissin ilk gittiği yer",a:["Sinema","Kum havuzu","Komagene"],correct:0},
+ {q:"Beraber ilk yediğimiz yemek",a:["Midye","Şırdan","Çiğköfte(zehirli)"],correct:2},
+ {q:"Hayalim ne:",a:["Sen","Sen","Sen"],all:true},
+ {q:"Birbirimizi ilk gördüğümüz yer",a:["Vatan","Mediamarkt","Mr bişey"],correct:0},
+ {q:"seni sevmekten vazgeçermiyim",a:["Hayır","İmkansız","ölürem daha iyi"],all:true},
+ {q:"Edanın en sevdiği şey",a:["Bedirhan","Bedurhan","Bediryan"],all:true},
+ {q:"Evlenince nerde oturcaz",a:["Zonguldak","Bursa","İstanbull"],correct:1},
+ {q:"Hayattaki en büyük şansım",a:["Edaa","Edaa","Edaa"],all:true},
+ {q:"Beni hala seviyomusun",a:["Hayır","Evet","Hayır"],correct:1}
+];
+const screenIds=["introScreen","quizStart","questionScreen","loveScreen","letterScreen","forgiveScreen","finalScreen"];
+function showScreen(id){screenIds.forEach(x=>document.getElementById(x).classList.toggle("active",x===id));}
+let current=0, locked=false;
+const title=document.getElementById("questionTitle");
+const options=document.getElementById("options");
+const photos=document.getElementById("questionPhotos");
+function renderQuestion(){
+ const item=questions[current];
+ document.getElementById("questionCount").textContent=(current+1)+" / 10";
+ title.textContent=item.q;
+ photos.hidden=current>2;
+ options.innerHTML="";
+ item.a.forEach((answer,index)=>{
+  const b=document.createElement("button");
+  b.className="option";
+  b.textContent=String.fromCharCode(65+index)+"- "+answer;
+  b.addEventListener("click",()=>{
+   if(locked)return;
+   const good=item.all || index===item.correct;
+   if(!good){b.classList.add("wrong");setTimeout(()=>b.classList.remove("wrong"),420);return;}
+   locked=true;b.classList.add("correct");
+   setTimeout(()=>{
+    current++;
+    if(current<questions.length)renderQuestion();
+    else showScreen("loveScreen");
+    locked=false;
+   },520);
+  });
+  options.appendChild(b);
+ });
+}
+document.getElementById("continueButton").addEventListener("click",()=>{
+ const entered=document.getElementById("passwordInput").value;
+ const error=document.getElementById("passwordError");
+ if(entered==="0913"){
+  error.textContent="";
+  showScreen("quizStart");
+ }else{
+  error.textContent="Şifre yanlış, tekrar dene.";
+  document.getElementById("passwordInput").value="";
+ }
+});
+document.getElementById("passwordInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")document.getElementById("continueButton").click();
+});
+
+document.getElementById("startQuiz").addEventListener("click",()=>{
+ document.getElementById("app").classList.add("started");
+ const music=document.getElementById("bgMusic");
+ music.play().catch(()=>{});
+ current=0;renderQuestion();showScreen("questionScreen");
+});
+
+const shell=document.getElementById("sliderShell"),track=document.getElementById("sliderTrack");
+const fill=document.getElementById("sliderFill"),thumb=document.getElementById("sliderThumb"),percent=document.getElementById("sliderPercent");
+let dragging=false,value=0,completed=false;
+function setSlider(clientX){
+ const r=track.getBoundingClientRect();
+ value=Math.max(0,Math.min(100,Math.round((clientX-r.left)/r.width*100)));
+ fill.style.width=value+"%";thumb.style.left=value+"%";percent.textContent="%"+value;
+ if(value===100&&!completed){completed=true;setTimeout(()=>showScreen("letterScreen"),450);}
+}
+shell.addEventListener("pointerdown",e=>{if(completed)return;dragging=true;shell.setPointerCapture(e.pointerId);setSlider(e.clientX);});
+shell.addEventListener("pointermove",e=>{if(dragging&&!completed)setSlider(e.clientX);});
+function stopDrag(){dragging=false;}
+shell.addEventListener("pointerup",stopDrag);shell.addEventListener("pointercancel",stopDrag);
+document.getElementById("closeLetter").addEventListener("click",()=>showScreen("forgiveScreen"));
+
+let noCount=0;
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("click",()=>{
+ noCount++;
+ if(noCount>=4){noBtn.style.opacity="0";noBtn.style.transform="scale(0)";setTimeout(()=>noBtn.remove(),260);}
+ else{
+  const scale=[.72,.48,.25][noCount-1];
+  noBtn.style.transform="scale("+scale+")";
+  noBtn.style.fontSize=(16*scale)+"px";
+  noBtn.style.padding=(15*scale)+"px "+(32*scale)+"px";
+ }
+});
+document.getElementById("yesBtn").addEventListener("click",()=>{
+ showScreen("finalScreen");
+ setTimeout(()=>document.getElementById("fadeout").classList.add("on"),2600);
+});
+document.getElementById("musicToggle").addEventListener("click",()=>{
+ const m=document.getElementById("bgMusic");
+ if(m.paused)m.play().catch(()=>{});else m.pause();
+});
+</script>
+</body>
+</html>
